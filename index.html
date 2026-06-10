@@ -226,7 +226,7 @@ header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-be
 ══════════════════════════════════════ */
 @media (max-width:768px){
 
-  /* Layout : 1 colonne, header + viewer plein écran */
+  /* Layout : 1 colonne */
   .app{grid-template-columns:1fr;grid-template-rows:46px 1fr}
 
   /* Header compact */
@@ -234,75 +234,77 @@ header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-be
   .badge{font-size:8px;padding:4px 8px;letter-spacing:.08em}
   header{padding:0 14px}
 
-  /* Viewer plein écran, laisser place à la fbar en bas */
-  .viewer{padding-bottom:56px}
-
   /* Toolbar */
   .btns{top:8px;left:8px;gap:3px}
   .btn{padding:8px 11px;font-size:9px}
 
-  /* Hint masqué sur mobile */
+  /* Hint masqué */
   .hint{display:none}
 
-  /* ─── Légende niveaux : barre horizontale ─── */
+  /* ─── Légende niveaux : barre fixée en bas du viewport ─── */
   .fbar{
-    bottom:0;left:0;right:0;
+    position:fixed !important;
+    bottom:0;left:0;right:0;top:auto;
     flex-direction:row;gap:0;
-    background:rgba(8,8,8,.95);
+    background:rgba(8,8,8,.97);
     border-top:1px solid var(--bd2);
-    padding:0;backdrop-filter:blur(10px);
-    position:absolute;
+    border-left:none;
+    padding:0;
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    z-index:25;
+    height:58px;
   }
   .fi{
     flex:1;flex-direction:column;align-items:center;justify-content:center;
-    gap:2px;padding:8px 4px;min-height:56px;
-    border-left:none;border-top:2px solid transparent;
-    padding-left:4px
+    gap:3px;padding:6px 4px;
+    border-left:none !important;
+    border-top:2px solid transparent;
+    min-height:58px;height:58px;
   }
-  .fi:hover{border-left:none;border-top-color:var(--bd2)}
-  .fi.on{border-left:none;border-top-color:var(--ac);background:var(--acd)}
-  .lvl{width:auto;font-size:11px;font-weight:800}
-  .lbl{font-size:7px;text-align:center;line-height:1.3;white-space:normal}
+  .fi:hover{border-top-color:var(--bd2);background:rgba(255,255,255,.03)}
+  .fi.on{border-top-color:var(--ac) !important;border-left:none !important;background:var(--acd)}
+  .fi.on .lvl,.fi.on .lbl{color:var(--ac)}
+  .lvl{width:auto;font-size:12px;font-weight:800;color:var(--td)}
+  .lbl{font-size:7px;text-align:center;line-height:1.3;color:var(--tf)}
 
-  /* ─── Panneau → bottom sheet ─── */
+  /* ─── Panneau → bottom sheet (s'arrête au-dessus de la fbar) ─── */
   .panel{
     position:fixed;
-    bottom:0;left:0;right:0;
-    height:68vh;
+    bottom:58px;left:0;right:0;
+    height:65vh;
     border-left:none;
     border-top:1px solid var(--bd2);
-    transform:translateY(100%);
+    transform:translateY(calc(100% + 58px));
     transition:transform .32s cubic-bezier(.4,0,.2,1);
-    z-index:35;
+    z-index:30;
   }
   .panel.mob-open{transform:translateY(0)}
 
-  /* Poignée de glissement */
+  /* Poignée */
   .mob-handle{
     display:block !important;
     width:36px;height:3px;
     background:var(--bd2);
     margin:10px auto 4px;
     flex-shrink:0;cursor:pointer;
-  }
-  .mob-close{
-    display:flex !important;
+    border-radius:2px;
   }
 
-  /* Overlay sombre derrière le panneau */
+  /* Overlay */
   .mob-overlay{
     display:block !important;
     position:fixed;inset:0;
-    background:rgba(0,0,0,.5);
-    z-index:34;
+    background:rgba(0,0,0,.55);
+    z-index:29;
     opacity:0;pointer-events:none;
     transition:opacity .32s;
   }
   .mob-overlay.show{opacity:1;pointer-events:all}
 
-  /* Chatbot adapté mobile */
-  .cb-window{width:calc(100vw - 16px);right:8px;bottom:76px;height:62vh}
-  .cb-fab{bottom:68px;right:12px;width:44px;height:44px;font-size:16px}
+  /* Chatbot au-dessus de la fbar */
+  .cb-window{width:calc(100vw - 16px);right:8px;bottom:70px;height:60vh}
+  .cb-fab{position:fixed;bottom:66px;right:12px;width:44px;height:44px;font-size:16px}
 }
 
 /* Éléments uniquement visible en mobile, cachés desktop */
