@@ -509,11 +509,11 @@ new THREE.GLTFLoader().load(decodeGLB(),(gltf)=>{
   const c=box.getCenter(new THREE.Vector3());
   bld.position.x=-c.x;bld.position.z=-c.z;bld.position.y=-box.min.y;
 
-  // Palette matériaux réalistes — Tours de l'Horloge, Felletin (Creuse)
+  // Palette matériaux réalistes — Tours de l'Horloge, Felletin
   const MC={
     pierre:  new THREE.MeshStandardMaterial({color:0xC2B09A,roughness:.90,metalness:.00}),
-    crepis:  new THREE.MeshStandardMaterial({color:0xD4C4A8,roughness:.88,metalness:.00}),
-    beton:   new THREE.MeshStandardMaterial({color:0xA2A29A,roughness:.86,metalness:.00}),
+    crepis:  new THREE.MeshStandardMaterial({color:0xD4C4A8,roughness:.87,metalness:.00}),
+    beton:   new THREE.MeshStandardMaterial({color:0xA2A29A,roughness:.85,metalness:.00}),
     bois:    new THREE.MeshStandardMaterial({color:0x9A7248,roughness:.80,metalness:.00}),
     madrier: new THREE.MeshStandardMaterial({color:0xB89060,roughness:.74,metalness:.00}),
     tuile:   new THREE.MeshStandardMaterial({color:0x605850,roughness:.92,metalness:.00}),
@@ -522,19 +522,58 @@ new THREE.GLTFLoader().load(decodeGLB(),(gltf)=>{
     verre:   new THREE.MeshStandardMaterial({color:0x7A9AB8,roughness:.06,metalness:.12,transparent:true,opacity:.30}),
     sol:     new THREE.MeshStandardMaterial({color:0x908878,roughness:.84,metalness:.00}),
   };
-  function pickMat(name){
-    const n=name.toLowerCase();
-    if(/verre|glass|window|fenetre|vitrage|glazing/.test(n)) return MC.verre;
-    if(/tuile|toiture|roof|ardoise|couverture|ifcroof/.test(n)) return MC.tuile;
-    if(/alu.*vert|green.*alu|vert/.test(n)) return MC.aluvert;
-    if(/alum|metal|acier|steel|zinc/.test(n)) return MC.alu;
-    if(/madrier|charpente|poutr|beam|solive|lambouri/.test(n)) return MC.madrier;
-    if(/bois|wood|planch|parquet|lambris|ifcbeam/.test(n)) return MC.bois;
-    if(/crepis|enduit|plaster|mortier/.test(n)) return MC.crepis;
-    if(/beton|concr|slab|dalle|ifcslab/.test(n)) return MC.beton;
-    if(/sol|floor|ground|terrain/.test(n)) return MC.sol;
-    if(/pierre|stone|maconn|moellon|granit|ifcwall|wall|mur/.test(n)) return MC.pierre;
-    return null;
+
+  // Couleurs par défaut par niveau si aucune classification possible
+  const FLOOR_DEF=[MC.pierre,MC.madrier,MC.beton,MC.tuile];
+
+  // Classification par couleur et propriétés du matériau IFC d'origine
+  function classifyMat(orig,fid){
+    if(!orig) return fid>=0?FLOOR_DEF[fid]:MC.pierre;
+
+    // 1. Transparent → verre
+    if(orig.transparent && orig.opacity<0.75) return MC.verre;
+
+    // 2. Métal (metalness IFC)
+    if(orig.metalness>0.55){
+      const c=orig.color;
+      if(c&&c.g>c.r&&c.b<c.r) return MC.aluvert;
+      return MC.alu;
+    }
+
+    const c=orig.color;
+    if(!c) return fid>=0?FLOOR_DEF[fid]:MC.pierre;
+
+    const r=c.r,g=c.g,b=c.b;
+    const lum=(r+g+b)/3;
+    const warm=r-b;
+    const sat=Math.max(r,g,b)-Math.min(r,g,b);
+
+    // 3. Quasi-noir → pas de couleur IFC définie, utiliser défaut par niveau
+    if(lum<0.04) return fid>=0?FLOOR_DEF[fid]:MC.pierre;
+
+    // 4. Bleu/bleu-gris → verre
+    if(b>r+0.05&&b>g-0.02) return MC.verre;
+
+    // 5. Vert → alu vert
+    if(g>r+0.08&&g>b+0.08) return MC.aluvert;
+
+    // 6. Très clair et peu saturé → crépis/enduit
+    if(lum>0.72&&sat<0.10) return MC.crepis;
+
+    // 7. Gris neutre → béton
+    if(sat<0.04&&lum>0.3&&lum<0.72) return MC.beton;
+
+    // 8. Chaud et foncé → tuiles/ardoise
+    if(lum<0.28&&warm>0.02) return MC.tuile;
+
+    // 9. Chaud et saturé brun → bois/madrier
+    if(warm>0.12&&sat>0.12&&lum<0.55) return lum<0.35?MC.bois:MC.madrier;
+
+    // 10. Tons beige/pierre
+    if(warm>0.03&&lum>0.35) return MC.pierre;
+
+    // Défaut par niveau
+    return fid>=0?FLOOR_DEF[fid]:MC.pierre;
   }
 
   const nm={'floor_-1':-1,'floor_0':0,'floor_1':1,'floor_2':2,'floor_3':3};
@@ -543,16 +582,33 @@ new THREE.GLTFLoader().load(decodeGLB(),(gltf)=>{
     let n=obj,fid=-1;
     while(n){if(n.name&&nm[n.name]!==undefined){fid=nm[n.name];break;}n=n.parent;}
     obj.userData.floor=fid;
+
+    // Essai 1 : détection par nom (fonctionne si noms lisibles)
     const label=(obj.name||'')+' '+(obj.material&&obj.material.name?obj.material.name:'');
-    const picked=pickMat(label);
-    if(picked){
-      const m=picked.clone();
-      m.side=THREE.DoubleSide;
-      obj.material=m;
-    }else if(obj.material){
-      obj.material.side=THREE.DoubleSide;
+    const hasKeyword=/verre|glass|window|bois|wood|pierre|stone|beton|concr|tuile|roof|alu|metal|sol|floor|crepis|madrier|beam/i.test(label);
+
+    let mat;
+    if(hasKeyword){
+      const nl=label.toLowerCase();
+      if(/verre|glass|window|vitrage/.test(nl)) mat=MC.verre;
+      else if(/tuile|roof|ardoise/.test(nl))    mat=MC.tuile;
+      else if(/alu.*vert|green/.test(nl))        mat=MC.aluvert;
+      else if(/alum|metal|acier/.test(nl))       mat=MC.alu;
+      else if(/madrier|charpente|beam/.test(nl)) mat=MC.madrier;
+      else if(/bois|wood/.test(nl))              mat=MC.bois;
+      else if(/crepis|enduit/.test(nl))          mat=MC.crepis;
+      else if(/beton|concr|slab/.test(nl))       mat=MC.beton;
+      else if(/sol|floor/.test(nl))              mat=MC.sol;
+      else                                        mat=MC.pierre;
+    }else{
+      // Essai 2 : classification par couleur IFC d'origine
+      mat=classifyMat(obj.material,fid);
     }
-    obj.userData.origMat=obj.material?obj.material.clone():null;
+
+    const m=mat.clone();
+    m.side=THREE.DoubleSide;
+    obj.material=m;
+    obj.userData.origMat=m.clone();
     meshes.push(obj);
   });
 
