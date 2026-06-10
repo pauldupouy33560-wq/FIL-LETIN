@@ -257,21 +257,46 @@ const FLOORS=[
   {id:0,eye:"Rez-de-chauss\u00e9e",title:"Accueil & M\u00e9moire",
    desc:"Espace d'exposition d\u00e9di\u00e9 \u00e0 la fili\u00e8re laine de Felletin. Galerie m\u00e9morielle, vitrine des savoir-faire locaux.",
    mats:[{n:"Pierre",c:"#FDFDCE"},{n:"Cr\u00e9pis beige",c:"#E0C88A"},{n:"B\u00e9ton",c:"#C0C0C0"},{n:"Bois",c:"#DFBF85"},{n:"Verre",c:"#5C62B0"}],
-   media:[{l:"Vue RDC \u2014 Entr\u00e9e",t:"image"},{l:"Vue RDC \u2014 Galerie",t:"image"},{l:"Visite VR RDC",t:"video"},{l:"Rendu mat\u00e9riaux",t:"image"}]},
+   audioSrc:"audio/rdc.mp3",
+   media:[
+     {l:"Vue RDC \u2014 Entr\u00e9e",t:"image",src:"photo/rdc_1.png"},
+     {l:"Vue RDC \u2014 Int\u00e9rieur",t:"image",src:"photo/rdc_2.png"},
+     {l:"Visite VR RDC",t:"video",src:"vidéo/rdc.mp4"},
+     {l:"Vue RDC \u2014 D\u00e9tail",t:"image",src:"photo/rdc_3.png"},
+     {l:"Vue RDC \u2014 Ambiance",t:"image",src:"photo/rdc_4.png"},
+     {l:"Vue RDC \u2014 Espace",t:"image",src:"photo/rdc_5.png"},
+     {l:"Vue RDC \u2014 Rendu",t:"image",src:"photo/rdc_6.png"}
+   ]},
   {id:1,eye:"1er \u00e9tage \u2014 R+1",title:"Cr\u00e9ation Contemporaine",
    desc:"Ateliers d'artistes, expositions et caf\u00e9 artistique. Crois\u00e9e des savoir-faire textiles et de la cr\u00e9ation contemporaine.",
    mats:[{n:"Pierre",c:"#FDFDCE"},{n:"Madriers",c:"#C19F73"},{n:"Bois - Pin",c:"#DFBF85"},{n:"Verre",c:"#5C62B0"},{n:"Aluminium",c:"#F0F0F0"}],
-   media:[{l:"Vue R+1 \u2014 Atelier",t:"image"},{l:"Vue R+1 \u2014 Caf\u00e9",t:"image"},{l:"Visite VR R+1",t:"video"},{l:"Rendu ambiance",t:"image"}]},
+   audioSrc:"audio/r1.mp3",
+   media:[
+     {l:"Vue R+1 \u2014 Atelier",t:"image",src:"photo/r1_1.png"},
+     {l:"Vue R+1 \u2014 Ambiance",t:"image",src:"photo/r1_2.png"},
+     {l:"Visite VR R+1",t:"video",src:"vidéo/r1.mp4"},
+     {l:"Vue R+1 \u2014 D\u00e9tail",t:"image",src:"photo/r1_3.png"}
+   ]},
   {id:2,eye:"2\u00e8me \u00e9tage \u2014 R+2",title:"Formation",
    desc:"Salles de cours et espaces p\u00e9dagogiques d\u00e9di\u00e9s \u00e0 la transmission des savoir-faire du patrimoine b\u00e2ti.",
    mats:[{n:"Pierre",c:"#FDFDCE"},{n:"Bois",c:"#DFBF85"},{n:"Mur d\u00e9faut",c:"#8E8B79"},{n:"Verre",c:"#5C62B0"}],
-   media:[{l:"Vue R+2 \u2014 Cours",t:"image"},{l:"Vue R+2 \u2014 Atelier",t:"image"},{l:"Visite VR R+2",t:"video"},{l:"Plan am\u00e9nag.",t:"image"}]},
+   audioSrc:"audio/r2.mp3",
+   media:[
+     {l:"Vue R+2 \u2014 Cours",t:"image",src:"photo/r2_1.png"},
+     {l:"Vue R+2 \u2014 Atelier",t:"image",src:"photo/r2_2.png"},
+     {l:"Visite VR R+2",t:"video",src:"vidéo/r2.mp4"}
+   ]},
   {id:3,eye:"R+3 & Combles",title:"Gaming & H\u00e9bergement",
    desc:"Espace num\u00e9rique et r\u00e9alit\u00e9 virtuelle au R+3. Studios sous la charpente r\u00e9habilit\u00e9e des combles.",
    mats:[{n:"Bois",c:"#DFBF85"},{n:"Tuiles",c:"#787878"},{n:"Pierre",c:"#FDFDCE"},{n:"Allu vert",c:"#008000"},{n:"Verre",c:"#5C62B0"}],
-   media:[{l:"Vue R+3 \u2014 Gaming",t:"image"},{l:"Combles \u2014 Studio",t:"image"},{l:"Visite VR Haut",t:"video"},{l:"Charpente",t:"image"}]}
+   audioSrc:"audio/r3.mp3",
+   media:[
+     {l:"Vue R+3 \u2014 Gaming",t:"image",src:"photo/r3_1.png"},
+     {l:"Combles \u2014 Studio",t:"image",src:"photo/r3_2.png"},
+     {l:"Charpente",t:"image",src:"photo/r3_3.png"}
+   ]}
 ];
-const ud=FLOORS.map(()=>({au:null,media:[]}));
+const ud=FLOORS.map(f=>({au:f.audioSrc||null,media:f.media.map(s=>s.src?{u:s.src,t:s.t}:null)}));
 
 const cv=document.getElementById('c');
 const rdr=new THREE.WebGLRenderer({canvas:cv,antialias:true});
