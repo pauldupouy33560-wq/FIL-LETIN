@@ -8,10 +8,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#080808;--s1:#101010;--s2:#161616;--s3:#1E1E1E;
-  --bd:rgba(255,255,255,0.06);--bd2:rgba(255,255,255,0.14);--bd3:rgba(255,255,255,0.28);
-  --tx:#E8E8E8;--td:rgba(232,232,232,0.45);--tf:rgba(232,232,232,0.18);
-  --ac:#C9A96E;--ac2:#DFC08A;--acd:rgba(201,169,110,0.08);--acb:rgba(201,169,110,0.22);
+  --bg:#0B0B10;--s1:#13131A;--s2:#1A1A24;--s3:#22222E;
+  --bd:rgba(255,255,255,0.07);--bd2:rgba(255,255,255,0.15);--bd3:rgba(255,255,255,0.30);
+  --tx:#F0F0F4;--td:rgba(240,240,244,0.50);--tf:rgba(240,240,244,0.22);
+  --ac:#FF8A5C;--ac2:#FFB07C;--acd:rgba(255,138,92,0.10);--acb:rgba(255,138,92,0.28);
+  --grad:linear-gradient(135deg,#FF8A5C,#FF5C8A);
+  --r:10px;--r2:16px;
 }
 html,body{height:100%;background:var(--bg);color:var(--tx);
   font-family:'Inter','Segoe UI',system-ui,sans-serif;overflow:hidden;font-size:13px}
@@ -113,7 +115,7 @@ header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-be
   transition:background .14s,transform .1s;font-family:inherit}
 .pbtn:hover{background:var(--ac2)}
 .pbtn:active{transform:scale(.93)}
-.pbtn svg{fill:#080808;width:11px;height:11px}
+.pbtn svg{fill:#fff;width:11px;height:11px}
 .pa{flex:1}
 .pt{height:2px;background:var(--bd2);cursor:pointer;margin-bottom:6px}
 .pf{height:100%;background:var(--ac);width:0%;pointer-events:none}
@@ -160,16 +162,62 @@ header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-be
 .lx:hover{color:var(--tx)}
 
 /* ── CHATBOT FAB ── */
-.cb-fab{position:fixed;bottom:22px;right:22px;width:46px;height:46px;
-  background:var(--s2);border:1px solid var(--bd2);cursor:pointer;
-  box-shadow:0 8px 32px rgba(0,0,0,.7);z-index:50;
-  display:flex;align-items:center;justify-content:center;font-size:18px;
-  transition:all .2s;font-family:inherit}
-.cb-fab:hover{background:var(--ac);border-color:var(--ac);color:#080808;box-shadow:0 8px 32px rgba(201,169,110,.25)}
-.cb-fab.open{transform:rotate(45deg)}
-.cb-fab.pulse{animation:cbpulse 2.5s ease-out 1}
-@keyframes cbpulse{0%{box-shadow:0 8px 32px rgba(0,0,0,.7),0 0 0 0 rgba(201,169,110,.45)}
-  100%{box-shadow:0 8px 32px rgba(0,0,0,.7),0 0 0 26px rgba(201,169,110,0)}}
+.cb-fab{position:fixed;bottom:22px;right:22px;width:auto;height:42px;
+  background:var(--ac);border:1px solid var(--ac2);cursor:pointer;
+  box-shadow:0 6px 28px rgba(201,169,110,.35);z-index:50;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:0 16px 0 12px;
+  font-size:15px;transition:all .2s;font-family:inherit;color:#080808}
+.cb-fab-lbl{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#080808}
+.cb-fab:hover{background:var(--ac2);box-shadow:0 8px 36px rgba(201,169,110,.5)}
+.cb-fab.open{opacity:.7}
+.cb-fab.open .cb-fab-lbl::before{content:"Fermer "}
+.cb-fab.pulse{animation:cbpulse 3s ease-out infinite}
+@keyframes cbpulse{0%,100%{box-shadow:0 6px 28px rgba(201,169,110,.35),0 0 0 0 rgba(201,169,110,.4)}
+  50%{box-shadow:0 6px 28px rgba(201,169,110,.35),0 0 0 10px rgba(201,169,110,0)}}
+
+/* ── TOUCHE JEUNE : arrondis + dégradés ── */
+.btn{border-radius:999px;padding:7px 15px}
+.fi{border-radius:0 var(--r) var(--r) 0}
+.badge{border-radius:999px}
+.mat-chip{border-radius:999px}
+.mat-dot{border-radius:50%}
+.plr{border-radius:var(--r2)}
+.pbtn{border-radius:50%;background:var(--grad)}
+.pbtn:hover{background:var(--grad);filter:brightness(1.15)}
+.upb{border-radius:var(--r)}
+.noa{border-radius:var(--r)}
+.mt2{border-radius:var(--r)}
+.ph{border-radius:var(--r)}
+.lb img,.lb video{border-radius:var(--r2)}
+.lx{border-radius:999px;border:1px solid var(--bd2);padding:8px 18px}
+.cb-fab{border-radius:999px;background:var(--grad);border:none}
+.cb-fab:hover{background:var(--grad);filter:brightness(1.12)}
+.cb-window{border-radius:var(--r2)}
+.cb-avatar{border-radius:50%;background:var(--grad)}
+.cb-msg{border-radius:14px}
+.cb-msg.bot{border-radius:14px 14px 14px 4px}
+.cb-msg.user{border-radius:14px 14px 4px 14px;background:var(--grad);color:#fff}
+.cb-sug{border-radius:999px}
+.cb-field{border-radius:999px}
+.cb-send{border-radius:50%;background:var(--grad);color:#fff}
+.cb-send:hover{background:var(--grad);filter:brightness(1.12)}
+.cb-typing{border-radius:14px 14px 14px 4px}
+.panel{border-radius:0}
+@keyframes cbpulse{0%,100%{box-shadow:0 6px 28px rgba(255,138,92,.35),0 0 0 0 rgba(255,92,138,.4)}
+  50%{box-shadow:0 6px 28px rgba(255,138,92,.35),0 0 0 10px rgba(255,92,138,0)}}
+.cb-fab,.cb-fab-lbl{color:#fff}
+.cb-status::before{background:#34d399;box-shadow:0 0 6px #34d399}
+
+/* ── PRINT / PDF ── */
+@media print{
+  body{overflow:visible;background:#fff}
+  .panel,.fbar,.btns,.hint,.cb-fab,.cb-window,.lb,.mob-overlay{display:none!important}
+  .app{display:block;height:auto}
+  header{display:none!important}
+  .viewer{width:100vw;height:100vh;position:fixed;inset:0}
+  #c{width:100vw!important;height:100vh!important}
+}
 
 /* ── CHATBOT WINDOW ── */
 .cb-window{position:fixed;bottom:80px;right:22px;width:360px;height:490px;
@@ -278,6 +326,7 @@ header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-be
     transform:translateY(calc(100% + 58px));
     transition:transform .32s cubic-bezier(.4,0,.2,1);
     z-index:30;
+    border-radius:var(--r2) var(--r2) 0 0;
   }
   .panel.mob-open{transform:translateY(0)}
 
@@ -308,7 +357,7 @@ header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-be
 
   /* Chatbot au-dessus de la fbar */
   .cb-window{width:calc(100vw - 16px);right:8px;bottom:70px;height:60vh}
-  .cb-fab{position:fixed;bottom:66px;right:12px;width:44px;height:44px;font-size:16px}
+  .cb-fab{position:fixed;bottom:66px;right:12px;height:40px;font-size:14px;padding:0 14px 0 10px}
 }
 
 /* Éléments uniquement visible en mobile, cachés desktop */
@@ -340,6 +389,7 @@ header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-be
     <button class="btn" id="bw" onclick="toggleWire()">&#9643; Filaire</button>
     <button class="btn" id="bx" onclick="toggleX()">&#9723; Coupe</button>
     <button class="btn" onclick="clearSel()">&#10005; D&eacute;s&eacute;l.</button>
+    <button class="btn" onclick="exportPDF()" title="Exporter la vue 3D en PDF">&#128196; PDF</button>
   </div>
   <div class="fbar">
     <div class="fi" data-f="3" onclick="sel(3)"><div class="lvl">R+3</div><div class="lbl">Combles &middot; Gaming</div></div>
@@ -394,7 +444,7 @@ header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-be
 </div>
 
 <!-- CHATBOT -->
-<button class="cb-fab pulse" id="cb-fab" onclick="toggleChat()" title="Assistant FIL-LETIN">&#128172;</button>
+<button class="cb-fab pulse" id="cb-fab" onclick="toggleChat()" title="Assistant FIL-LETIN">&#128172;<span class="cb-fab-lbl">Assistant</span></button>
 <div class="cb-window" id="cb-window">
   <div class="cb-hdr">
     <div class="cb-avatar">F</div>
@@ -509,106 +559,16 @@ new THREE.GLTFLoader().load(decodeGLB(),(gltf)=>{
   const c=box.getCenter(new THREE.Vector3());
   bld.position.x=-c.x;bld.position.z=-c.z;bld.position.y=-box.min.y;
 
-  // Palette matériaux réalistes — Tours de l'Horloge, Felletin
-  const MC={
-    pierre:  new THREE.MeshStandardMaterial({color:0xC2B09A,roughness:.90,metalness:.00}),
-    crepis:  new THREE.MeshStandardMaterial({color:0xD4C4A8,roughness:.87,metalness:.00}),
-    beton:   new THREE.MeshStandardMaterial({color:0xA2A29A,roughness:.85,metalness:.00}),
-    bois:    new THREE.MeshStandardMaterial({color:0x9A7248,roughness:.80,metalness:.00}),
-    madrier: new THREE.MeshStandardMaterial({color:0xB89060,roughness:.74,metalness:.00}),
-    tuile:   new THREE.MeshStandardMaterial({color:0x605850,roughness:.92,metalness:.00}),
-    alu:     new THREE.MeshStandardMaterial({color:0xC8CCCE,roughness:.28,metalness:.75}),
-    aluvert: new THREE.MeshStandardMaterial({color:0x4E7A5A,roughness:.32,metalness:.65}),
-    verre:   new THREE.MeshStandardMaterial({color:0x7A9AB8,roughness:.06,metalness:.12,transparent:true,opacity:.30}),
-    sol:     new THREE.MeshStandardMaterial({color:0x908878,roughness:.84,metalness:.00}),
-  };
-
-  // Couleurs par défaut par niveau si aucune classification possible
-  const FLOOR_DEF=[MC.pierre,MC.madrier,MC.beton,MC.tuile];
-
-  // Classification par couleur et propriétés du matériau IFC d'origine
-  function classifyMat(orig,fid){
-    if(!orig) return fid>=0?FLOOR_DEF[fid]:MC.pierre;
-
-    // 1. Transparent → verre
-    if(orig.transparent && orig.opacity<0.75) return MC.verre;
-
-    // 2. Métal (metalness IFC)
-    if(orig.metalness>0.55){
-      const c=orig.color;
-      if(c&&c.g>c.r&&c.b<c.r) return MC.aluvert;
-      return MC.alu;
-    }
-
-    const c=orig.color;
-    if(!c) return fid>=0?FLOOR_DEF[fid]:MC.pierre;
-
-    const r=c.r,g=c.g,b=c.b;
-    const lum=(r+g+b)/3;
-    const warm=r-b;
-    const sat=Math.max(r,g,b)-Math.min(r,g,b);
-
-    // 3. Quasi-noir → pas de couleur IFC définie, utiliser défaut par niveau
-    if(lum<0.04) return fid>=0?FLOOR_DEF[fid]:MC.pierre;
-
-    // 4. Bleu/bleu-gris → verre
-    if(b>r+0.05&&b>g-0.02) return MC.verre;
-
-    // 5. Vert → alu vert
-    if(g>r+0.08&&g>b+0.08) return MC.aluvert;
-
-    // 6. Très clair et peu saturé → crépis/enduit
-    if(lum>0.72&&sat<0.10) return MC.crepis;
-
-    // 7. Gris neutre → béton
-    if(sat<0.04&&lum>0.3&&lum<0.72) return MC.beton;
-
-    // 8. Chaud et foncé → tuiles/ardoise
-    if(lum<0.28&&warm>0.02) return MC.tuile;
-
-    // 9. Chaud et saturé brun → bois/madrier
-    if(warm>0.12&&sat>0.12&&lum<0.55) return lum<0.35?MC.bois:MC.madrier;
-
-    // 10. Tons beige/pierre
-    if(warm>0.03&&lum>0.35) return MC.pierre;
-
-    // Défaut par niveau
-    return fid>=0?FLOOR_DEF[fid]:MC.pierre;
-  }
-
   const nm={'floor_-1':-1,'floor_0':0,'floor_1':1,'floor_2':2,'floor_3':3};
   bld.traverse(obj=>{
     if(!obj.isMesh) return;
     let n=obj,fid=-1;
     while(n){if(n.name&&nm[n.name]!==undefined){fid=nm[n.name];break;}n=n.parent;}
     obj.userData.floor=fid;
-
-    // Essai 1 : détection par nom (fonctionne si noms lisibles)
-    const label=(obj.name||'')+' '+(obj.material&&obj.material.name?obj.material.name:'');
-    const hasKeyword=/verre|glass|window|bois|wood|pierre|stone|beton|concr|tuile|roof|alu|metal|sol|floor|crepis|madrier|beam/i.test(label);
-
-    let mat;
-    if(hasKeyword){
-      const nl=label.toLowerCase();
-      if(/verre|glass|window|vitrage/.test(nl)) mat=MC.verre;
-      else if(/tuile|roof|ardoise/.test(nl))    mat=MC.tuile;
-      else if(/alu.*vert|green/.test(nl))        mat=MC.aluvert;
-      else if(/alum|metal|acier/.test(nl))       mat=MC.alu;
-      else if(/madrier|charpente|beam/.test(nl)) mat=MC.madrier;
-      else if(/bois|wood/.test(nl))              mat=MC.bois;
-      else if(/crepis|enduit/.test(nl))          mat=MC.crepis;
-      else if(/beton|concr|slab/.test(nl))       mat=MC.beton;
-      else if(/sol|floor/.test(nl))              mat=MC.sol;
-      else                                        mat=MC.pierre;
-    }else{
-      // Essai 2 : classification par couleur IFC d'origine
-      mat=classifyMat(obj.material,fid);
-    }
-
-    const m=mat.clone();
-    m.side=THREE.DoubleSide;
-    obj.material=m;
-    obj.userData.origMat=m.clone();
+    // Normalise vers un seul matériau et active DoubleSide
+    if(Array.isArray(obj.material)) obj.material=obj.material[0]||obj.material;
+    if(obj.material) obj.material.side=THREE.DoubleSide;
+    obj.userData.origMat=obj.material?obj.material.clone():null;
     meshes.push(obj);
   });
 
@@ -669,6 +629,16 @@ function toggleX(){
 function resetCam(){ctrl.target.set(0,6,0);cam.position.set(28,16,28);ctrl.update();clearSel();}
 
 const ray=new THREE.Raycaster();const mo=new THREE.Vector2();let mm=false;
+
+function exportPDF(){
+  // Capture canvas → nouvelle fenêtre → imprimer
+  const img=cv.toDataURL('image/png');
+  const w=window.open('','_blank');
+  w.document.write('<html><head><title>FIL-LETIN — Vue 3D</title><style>*{margin:0;padding:0}body{background:#000}img{width:100vw;height:100vh;object-fit:contain}@media print{img{width:100%;height:100%}}</style></head><body><img src="'+img+'"/></body></html>');
+  w.document.close();
+  setTimeout(()=>w.print(),400);
+}
+
 cv.addEventListener('mousedown',()=>mm=false);
 cv.addEventListener('mousemove',()=>mm=true);
 cv.addEventListener('mouseup',e=>{
