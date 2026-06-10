@@ -209,15 +209,45 @@ header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-be
 .cb-fab,.cb-fab-lbl{color:#fff}
 .cb-status::before{background:#34d399;box-shadow:0 0 6px #34d399}
 
-/* ── PRINT / PDF ── */
-@media print{
-  body{overflow:visible;background:#fff}
-  .panel,.fbar,.btns,.hint,.cb-fab,.cb-window,.lb,.mob-overlay{display:none!important}
-  .app{display:block;height:auto}
-  header{display:none!important}
-  .viewer{width:100vw;height:100vh;position:fixed;inset:0}
-  #c{width:100vw!important;height:100vh!important}
-}
+/* ── ÉCRAN D'INTRO ── */
+.intro{position:fixed;inset:0;z-index:200;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:32px;overflow:hidden;
+  transition:opacity .8s ease,visibility .8s}
+.intro::before{content:"";position:absolute;width:70vmax;height:70vmax;
+  top:-30vmax;right:-25vmax;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,138,92,.14),transparent 65%)}
+.intro::after{content:"";position:absolute;width:60vmax;height:60vmax;
+  bottom:-30vmax;left:-25vmax;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,92,138,.10),transparent 65%)}
+.intro.hide{opacity:0;visibility:hidden;pointer-events:none}
+.in-tag{font-size:10px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--td);margin-bottom:26px;animation:inUp .8s ease-out both}
+.in-title{font-size:clamp(44px,9vw,84px);font-weight:800;letter-spacing:.1em;
+  color:var(--tx);line-height:1.05;animation:inUp .8s ease-out .12s both}
+.in-title em{font-style:normal;background:var(--grad);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.in-sub{font-size:clamp(12px,2vw,15px);color:var(--td);letter-spacing:.06em;
+  margin-top:16px;line-height:1.7;max-width:480px;animation:inUp .8s ease-out .24s both}
+.in-div{width:48px;height:2px;background:var(--grad);border-radius:2px;
+  margin:30px 0;animation:inUp .8s ease-out .36s both}
+.in-names-lbl{font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--tf);margin-bottom:10px;animation:inUp .8s ease-out .42s both}
+.in-names{font-size:clamp(13px,2.4vw,16px);font-weight:500;color:var(--tx);
+  letter-spacing:.04em;line-height:1.9;animation:inUp .8s ease-out .48s both}
+.in-names span{color:var(--ac);margin:0 10px}
+.in-btn{margin-top:38px;padding:15px 42px;border:none;border-radius:999px;
+  background:var(--grad);color:#fff;font-family:inherit;cursor:pointer;
+  font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  box-shadow:0 10px 40px rgba(255,108,115,.35);transition:transform .2s,box-shadow .2s,filter .2s;
+  animation:inUp .8s ease-out .6s both}
+.in-btn:hover{transform:translateY(-2px);filter:brightness(1.12);
+  box-shadow:0 14px 48px rgba(255,108,115,.5)}
+.in-btn:active{transform:translateY(0)}
+.in-school{position:absolute;bottom:26px;left:0;right:0;font-size:9px;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--tf);
+  animation:inUp .8s ease-out .72s both}
+@keyframes inUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── CHATBOT WINDOW ── */
 .cb-window{position:fixed;bottom:80px;right:22px;width:360px;height:490px;
@@ -389,7 +419,6 @@ header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-be
     <button class="btn" id="bw" onclick="toggleWire()">&#9643; Filaire</button>
     <button class="btn" id="bx" onclick="toggleX()">&#9723; Coupe</button>
     <button class="btn" onclick="clearSel()">&#10005; D&eacute;s&eacute;l.</button>
-    <button class="btn" onclick="exportPDF()" title="Exporter la vue 3D en PDF">&#128196; PDF</button>
   </div>
   <div class="fbar">
     <div class="fi" data-f="3" onclick="sel(3)"><div class="lvl">R+3</div><div class="lbl">Combles &middot; Gaming</div></div>
@@ -441,6 +470,18 @@ header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-be
     </div>
   </div>
 </div>
+</div>
+
+<!-- ÉCRAN D'INTRO -->
+<div class="intro" id="intro">
+  <div class="in-tag">Visite 3D Interactive &middot; 2026</div>
+  <div class="in-title">FIL<em>&middot;</em>LETIN</div>
+  <div class="in-sub">R&eacute;habilitation des Tours de l'Horloge<br>Felletin &mdash; Creuse</div>
+  <div class="in-div"></div>
+  <div class="in-names-lbl">Projet r&eacute;alis&eacute; par</div>
+  <div class="in-names">Enzo D'arrigo<span>&middot;</span>Paul Dupouy<span>&middot;</span>Baptiste Le Bot</div>
+  <button class="in-btn" onclick="enterApp()">D&eacute;couvrir la visite</button>
+  <div class="in-school">Licence G&eacute;nie Civil BIM &middot; CNAM &mdash; LMB Felletin</div>
 </div>
 
 <!-- CHATBOT -->
@@ -630,13 +671,9 @@ function resetCam(){ctrl.target.set(0,6,0);cam.position.set(28,16,28);ctrl.updat
 
 const ray=new THREE.Raycaster();const mo=new THREE.Vector2();let mm=false;
 
-function exportPDF(){
-  // Capture canvas → nouvelle fenêtre → imprimer
-  const img=cv.toDataURL('image/png');
-  const w=window.open('','_blank');
-  w.document.write('<html><head><title>FIL-LETIN — Vue 3D</title><style>*{margin:0;padding:0}body{background:#000}img{width:100vw;height:100vh;object-fit:contain}@media print{img{width:100%;height:100%}}</style></head><body><img src="'+img+'"/></body></html>');
-  w.document.close();
-  setTimeout(()=>w.print(),400);
+function enterApp(){
+  document.getElementById('intro').classList.add('hide');
+  resize(); // recalcul du canvas au cas où
 }
 
 cv.addEventListener('mousedown',()=>mm=false);
