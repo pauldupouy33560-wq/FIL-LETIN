@@ -839,8 +839,23 @@ const KB={
   },
   // Planning
   planning:{
-    kw:["planning","4d","5d","navisworks","phase","cout","co\u00fbt","prix","budget","travaux"],
-    a:"Le planning 4D (s\u00e9quences temporelles) et 5D (co\u00fbts associ\u00e9s) a \u00e9t\u00e9 produit sous Navisworks. Il fait appara\u00eetre les phases : \u00e9tat initial, structure gros-\u0153uvre mise \u00e0 nu, am\u00e9nagements int\u00e9rieurs/ext\u00e9rieurs. Estimation bas\u00e9e sur les prix CYPE."
+    kw:["planning","4d","navisworks","phase","travaux","duree","dur\u00e9e","calendrier","date","debut","d\u00e9but","fin","gantt"],
+    a:"Le planning 4D pr\u00e9voit <b>102 jours de travaux</b>, du 01/01/2027 au 08/04/2027, en 3 phases en cascade par niveau :\n\u2022 <b>D\u00e9molition</b> (31 j) : curage cloisons (8 j), d\u00e9pose planchers bois (13 j), d\u00e9molition murs pierre (10 j)\n\u2022 <b>Structure GO</b> : planchers bois neufs (8 j/niveau) et murs ossature (4 j/niveau), encha\u00een\u00e9s RDC \u2192 R+1 \u2192 R+2\n\u2022 <b>Second \u0153uvre</b> : isolation/doublage (7 j/niveau) puis cloisons int\u00e9rieures (5 j/niveau)\nBase : 5 ouvriers \u00e0 7 h/jour. Planning produit sous Navisworks."
+  },
+  // Budget / co\u00fbts
+  couts:{
+    kw:["cout","co\u00fbt","couts","co\u00fbts","prix","budget","budget des travaux","cout des travaux","5d","estimation","chiffrage","euros","montant","cher","combien coute"],
+    a:"Le co\u00fbt total estim\u00e9 du projet est de <b>84 130 \u20ac HT</b> (\u00e9tude 5D, prix CYPE) :\n\u2022 <b>D\u00e9molition</b> \u2014 10 824 \u20ac : curage cloisons 2 259 \u20ac \u00b7 d\u00e9pose planchers 5 094 \u20ac \u00b7 murs pierre 3 471 \u20ac\n\u2022 <b>Structure GO</b> \u2014 40 361 \u20ac : planchers bois neufs 35 130 \u20ac (309,6 m\u00b2) \u00b7 murs ext. et cloisons bois 5 231 \u20ac (61,5 m\u00b2)\n\u2022 <b>Second \u0153uvre</b> \u2014 32 945 \u20ac : isolation/doublage thermique 23 551 \u20ac (359,6 m\u00b2) \u00b7 cloisons Placostil 9 394 \u20ac (184,6 m\u00b2)"
+  },
+  // Prix unitaires CYPE
+  cype:{
+    kw:["cype","unitaire","ratio","prix unitaire","placostil","ba13","solive","meleze","m\u00e9l\u00e8ze","justification"],
+    a:"Prix unitaires HT issus de la base <b>CYPE</b> :\n\u2022 Solive bois pin sylvestre : 4,88 \u20ac\n\u2022 Planche m\u00e9l\u00e8ze d'Europe : 36,75 \u20ac\n\u2022 Main d'\u0153uvre charpentier : 5,83 \u20ac (1 h/m\u00b2)\n\u2022 Cloison Placostil 72/36 BA13 : 50,89 \u20ac/m\u00b2 (0,18 h/m\u00b2)\n\u2022 D\u00e9pose cloison pl\u00e2tre : 7,86 \u20ac/m\u00b2 (0,42 h/m\u00b2)\n\u2022 D\u00e9molition mur porteur pierre (GPD040) : 45 \u20ac/m\u00b2 (1,5 h/m\u00b2)"
+  },
+  // D\u00e9chets / bennes
+  bennes:{
+    kw:["benne","bennes","dechet","d\u00e9chet","dechets","d\u00e9chets","evacuation","\u00e9vacuation","gravats","demolition volume","tri","foisonnement","rotation"],
+    a:"L'\u00e9tude d'\u00e9vacuation pr\u00e9voit <b>166,6 m\u00b3 en place</b>, soit 233,2 m\u00b3 foisonn\u00e9s (coeff. 1,4) et <b>20 rotations de bennes</b> :\n\u2022 Bois (planchers + cloisons) : 111,7 m\u00b3 \u2192 11 bennes de 15 m\u00b3\n\u2022 Pierre (gravats lourds) : 30,5 m\u00b3 \u2192 6 bennes de 8 m\u00b3\n\u2022 Pl\u00e2tre : 17,0 m\u00b3 \u2192 2 bennes de 15 m\u00b3\n\u2022 DIB / m\u00e9lange : 7,4 m\u00b3 \u2192 1 benne de 15 m\u00b3\n\n\u26a0\ufe0f Pour la pierre (\u22481,5 t/m\u00b3), une benne de 15 m\u00b3 pleine p\u00e8serait plus de 22 t, au-del\u00e0 de la charge utile des camions (10\u201312 t) : d'o\u00f9 des bennes sp\u00e9ciales gravats de 8 m\u00b3."
   },
   // Salutations
   hello:{
@@ -855,10 +870,11 @@ const KB={
 
 const SUGGESTIONS=[
   "C'est quoi le projet ?",
+  "Quel est le budget des travaux ?",
+  "Dur\u00e9e du chantier ?",
+  "\u00c9vacuation des d\u00e9chets ?",
   "Quels sont les niveaux ?",
-  "Quels mat\u00e9riaux sont utilis\u00e9s ?",
   "Histoire du b\u00e2timent ?",
-  "D\u00e9marche \u00e9cologique ?",
   "Outils BIM ?"
 ];
 
@@ -946,7 +962,7 @@ function sendMsg(){
     if(ans){
       addBotMsg(ans);
     }else{
-      addBotMsg("Je n'ai pas trouv\u00e9 d'information pr\u00e9cise sur ce sujet. Essayez avec ces th\u00e8mes : <b>niveaux, mat\u00e9riaux, histoire, BIM, \u00e9cologie, Twinmotion, planning</b>.");
+      addBotMsg("Je n'ai pas trouv\u00e9 d'information pr\u00e9cise sur ce sujet. Essayez avec ces th\u00e8mes : <b>niveaux, mat\u00e9riaux, histoire, BIM, \u00e9cologie, budget, planning, d\u00e9chets</b>.");
     }
     setTimeout(()=>renderSuggestions(),400);
   }, 600+Math.random()*400);
